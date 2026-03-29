@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Special for Her</title>
+    <style>
+        /* Делаем красивый фон-градиент */
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c3e50 100%);
+            color: white;
+            text-align: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin: 0;
+        }
+
+        h1 {
+            color: #ffcc00;
+            text-shadow: 2px 2px 10px rgba(255, 204, 0, 0.5);
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Оживляем кнопку */
+        .magic-button {
+            padding: 15px 30px;
+            background-color: #ffcc00;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 30px;
+            box-shadow: 0 4px 15px rgba(255, 204, 0, 0.3);
+        }
+
+        /* Эффект при нажатии */
+        .magic-button:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 5px rgba(255, 204, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>С возвращением!</h1>
+    <p>Пока ты была на празднике, я кодил мой первый сайт</p>
+    <p>Надеюсь, ДР мамы проходит хорошо</p>
+
+    <button class="magic-button" onclick="sayHello()">Открыть сюрприз 🎁</button>
+
+    <script>
+        // Это JavaScript — мозги твоего сайта
+        function sayHello() {
+            alert("С др маму, лайк за старания");
+        }
+    </script>
+
+</body>
+</html>
