@@ -2,186 +2,255 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Butterfly World | Encyclopedia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zefir Universe 2.0</title>
+    
     <style>
         :root {
-            --main-bg: #f0faff;
-            --accent: #00ced1;
-            --text-color: #008b8b;
+            --pink: #FFC0CB;
+            --blue: #B0E0E6;
             --white: #ffffff;
-            --soft-blue: #e0ffff;
+            --text: #444;
         }
 
         body {
-            background-color: var(--main-bg);
-            color: var(--text-color);
-            font-family: 'Segoe UI', Tahoma, sans-serif;
             margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #fff;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* Главный экран */
+        header {
+            height: 100vh;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
-            min-height: 100vh;
-        }
-
-        header {
-            background: linear-gradient(135deg, #00ced1, #40e0d0);
-            color: white;
-            width: 100%;
-            padding: 60px 0;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        h1 { margin: 0; font-size: 3.5em; cursor: pointer; transition: 0.3s; }
-
-        .content-section {
-            max-width: 900px;
-            width: 90%;
-            margin: 20px 0;
-        }
-
-        .info-card {
-            background: var(--white);
-            padding: 30px;
-            margin-bottom: 20px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,139,139,0.05);
-            border-left: 8px solid var(--accent);
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .grid-item {
-            background: var(--soft-blue);
-            padding: 20px;
-            border-radius: 15px;
+            background: linear-gradient(135deg, var(--pink), var(--blue));
+            position: relative;
             text-align: center;
         }
 
-        .btn {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 12px 35px;
-            background-color: var(--text-color);
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .hero-content {
+            z-index: 2;
+            pointer-events: none; /* Текст не мешает кликам */
+        }
+
+        h1 {
+            font-size: 3.5rem;
             color: white;
-            border: none;
-            border-radius: 50px;
+            text-shadow: 2px 2px 15px rgba(0,0,0,0.1);
+            margin: 0 0 10px 0;
+        }
+
+        /* КНОПКА САЛЮТА */
+        .burst-btn {
+            z-index: 10; /* Поверх всего */
+            background: rgba(255, 255, 255, 0.8);
+            color: var(--pink);
+            border: 2px solid white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1.2rem;
             font-weight: bold;
             cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            top: 20px;
+        }
+
+        .burst-btn:hover {
+            background: white;
+            transform: scale(1.1) translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .burst-btn:active {
+            transform: scale(0.95) translateY(0);
+        }
+
+        /* Секции с текстом */
+        section {
+            padding: 60px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+            position: relative;
+            z-index: 3;
+            background: white;
+        }
+
+        .card {
+            background: #fdfdfd;
+            border-left: 5px solid var(--pink);
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-radius: 0 15px 15px 0;
             transition: 0.3s;
         }
 
-        .btn:hover { background-color: var(--accent); transform: translateY(-2px); }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 139, 139, 0.7);
-            backdrop-filter: blur(5px);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
+        .card:hover {
+            transform: translateY(-5px);
+            border-left-color: var(--blue);
         }
 
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            max-width: 500px;
-            position: relative;
+        h2 { 
+            color: #ff8fb1; 
+            border-bottom: 2px solid var(--blue); 
+            display: inline-block; 
+            margin-bottom: 20px;
         }
-
-        .butterfly-effect {
-            position: fixed; pointer-events: none; z-index: 999; font-size: 2.5em;
-            animation: fly 1.5s ease-out forwards;
-        }
-
-        @keyframes fly {
-            0% { transform: translate(0,0) scale(1) rotate(0deg); opacity: 1; }
-            100% { transform: translate(var(--dx), var(--dy)) scale(0) rotate(var(--dg)); opacity: 0; }
-        }
+        
     </style>
 </head>
 <body>
 
-<header>
-    <h1 id="butterflyTrigger">BUTTERFLY</h1>
-    <p>Погружение в мир чешуекрылых</p>
-</header>
-
-<div class="content-section">
-    <div class="info-card">
-        <h2>Что такое метаморфоза?</h2>
-        <p>Каждая бабочка проходит через четыре стадии: яйцо, личинка (гусеница), куколка и взрослая особь (имаго). Это один из самых сложных процессов в природе, когда существо полностью перестраивает структуру своего тела внутри кокона.</p>
-        <button class="btn" onclick="openModal()">Список видов</button>
-    </div>
-
-    <div class="grid">
-        <div class="grid-item">
-            <h3>🎨 Окрас</h3>
-            <p>Цвета крыльев создаются не только пигментами, но и преломлением света в чешуйках.</p>
+    <header>
+        <canvas id="rain"></canvas>
+        <div class="hero-content">
+            <h1>Zefir Universe</h1>
+            <p style="color: white; font-size: 1.1rem; margin: 0;">Твоя доза воздушной нежности</p>
         </div>
-        <div class="grid-item">
-            <h3>🧭 Навигация</h3>
-            <p>Многие виды используют "солнечный компас", чтобы пролетать до 4000 км без карты.</p>
+        <button class="burst-btn" onclick="createZefirBurst()">Взрыв нежности!</button>
+    </header>
+
+    <section id="history">
+        <h2>История Окрыления</h2>
+        <div class="card">
+            <p><b>Древний Египет:</b> Прародитель зефира — лекарство из алтея и меда. Помогало от простуды и радовало фараонов.</p>
         </div>
-        <div class="grid-item">
-            <h3>👅 Вкус</h3>
-            <p>Знаете ли вы, что бабочки чувствуют вкус своими лапками? Так они ищут еду.</p>
+        <div class="card">
+            <p><b>Французский Шик:</b> В XIX веке кондитеры добавили взбитый белок и яблочное пюре. Так родился современный зефир.</p>
         </div>
-    </div>
+        <div class="card">
+            <p><b>Имя Бога:</b> Назван в честь Зефира — древнегреческого бога ласкового западного ветра. Такой же легкий и нежный.</p>
+        </div>
+    </section>
 
-    <div class="info-card" style="margin-top: 20px;">
-        <h2>Бирюзовая магия</h2>
-        <p>Бирюзовые и голубые оттенки — самые редкие в живой природе. У бабочек рода <i>Morpho</i> крылья на самом деле не синие; их структура устроена так, что она отражает только синий спектр света, поглощая остальные.</p>
-    </div>
-</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-<div id="myModal" class="modal">
-    <div class="modal-content">
-        <h2 style="margin-top:0">Редкие виды:</h2>
-        <ul>
-            <li><b>Морфо Пелеида</b> — живая легенда тропиков.</li>
-            <li><b>Голубянка</b> — маленькая, но очень яркая.</li>
-            <li><b>Парусник Маака</b> — встречается на Дальнем Востоке.</li>
-        </ul>
-        <button class="btn" onclick="closeModal()">Закрыть</button>
-    </div>
-</div>
+    <script>
+        // ОСНОВНАЯ СЦЕНА (ПАДАЮЩИЙ ФОН)
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('rain'), alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
 
-<script>
-    const title = document.getElementById('butterflyTrigger');
-    title.addEventListener('mouseover', (e) => {
-        for(let i=0; i<10; i++) {
-            const b = document.createElement('div');
-            b.className = 'butterfly-effect';
-            b.innerText = '🦋';
-            b.style.left = e.pageX + 'px';
-            b.style.top = e.pageY + 'px';
-            const dx = (Math.random() - 0.5) * 400 + 'px';
-            const dy = (Math.random() - 0.5) * 400 + 'px';
-            const dg = (Math.random() - 0.5) * 1000 + 'deg';
-            b.style.setProperty('--dx', dx);
-            b.style.setProperty('--dy', dy);
-            b.style.setProperty('--dg', dg);
-            document.body.appendChild(b);
-            setTimeout(() => b.remove(), 1500);
+        // Геометрия одной зефирки
+        const geometry = new THREE.IcosahedronGeometry(0.4, 1);
+        const materialPink = new THREE.MeshBasicMaterial({ color: 0xFFC0CB });
+        const materialBlue = new THREE.MeshBasicMaterial({ color: 0xB0E0E6 });
+
+        // Массив для падающих зефирок
+        const fallingZefirs = [];
+
+        // Создаем падающий фон (60 штук)
+        for (let i = 0; i < 60; i++) {
+            const material = Math.random() > 0.5 ? materialPink : materialBlue;
+            const zefir = new THREE.Mesh(geometry, material);
+            
+            zefir.position.set(
+                Math.random() * 20 - 10, 
+                Math.random() * 20 - 10, 
+                Math.random() * 10 - 5
+            );
+            
+            zefir.velocity = Math.random() * 0.02 + 0.005; // Медленно падают
+            zefir.rotSpeed = Math.random() * 0.01;
+            
+            fallingZefirs.push(zefir);
+            scene.add(zefir);
         }
-    });
 
-    function openModal() { document.getElementById('myModal').style.display = 'flex'; }
-    function closeModal() { document.getElementById('myModal').style.display = 'none'; }
-    window.onclick = function(event) {
-        if (event.target == document.getElementById('myModal')) closeModal();
-    }
-</script>
+        // Массив для зефирок из "салюта"
+        const burstZefirs = [];
 
+        camera.position.z = 8;
+
+        // ФУНКЦИЯ ДЛЯ КНОПКИ (САЛЮТ)
+        function createZefirBurst() {
+            const burstCount = 30; // Сколько вылетит за один раз
+            for (let i = 0; i < burstCount; i++) {
+                const material = Math.random() > 0.5 ? materialPink : materialBlue;
+                // Зефирки салюта чуть меньше падающих
+                const burstGeometry = new THREE.IcosahedronGeometry(0.25, 1);
+                const zefir = new THREE.Mesh(burstGeometry, material);
+                
+                // Все вылетают из центра (примерно за текстом)
+                zefir.position.set(0, 0, 0);
+                
+                // Случайное направление взрыва (вверх и в стороны)
+                zefir.vx = (Math.random() - 0.5) * 0.3; // Скорость по X
+                zefir.vy = Math.random() * 0.3 + 0.1;   // Скорость по Y (всегда вверх)
+                zefir.vz = (Math.random() - 0.5) * 0.2; // Скорость по Z
+                
+                zefir.rotSpeed = Math.random() * 0.1;
+                zefir.life = 100; // "Жизнь" зефирки (чтобы потом исчезла)
+
+                burstZefirs.push(zefir);
+                scene.add(zefir);
+            }
+        }
+
+        // ГЛАВНЫЙ ЦИКЛ АНИМАЦИИ
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // 1. Анимация падающего фона
+            fallingZefirs.forEach(z => {
+                z.position.y -= z.velocity;
+                z.rotation.x += z.rotSpeed;
+                z.rotation.y += z.rotSpeed;
+                
+                // Если улетела вниз, возвращаем наверх
+                if (z.position.y < -10) z.position.y = 10;
+            });
+
+            // 2. Анимация салюта (burst)
+            for (let i = burstZefirs.length - 1; i >= 0; i--) {
+                const z = burstZefirs[i];
+                z.position.x += z.vx;
+                z.position.y += z.vy;
+                z.position.z += z.vz;
+                
+                z.rotation.x += z.rotSpeed;
+                z.rotation.y += z.rotSpeed;
+                
+                // Гравитация (притягивает салют вниз со временем)
+                z.vy -= 0.005; 
+                
+                z.life--; // Уменьшаем жизнь
+
+                // Если жизнь кончилась или улетела далеко, удаляем
+                if (z.life <= 0 || z.position.y < -10) {
+                    scene.remove(z);
+                    burstZefirs.splice(i, 1);
+                }
+            }
+            
+            renderer.render(scene, camera);
+        }
+
+        // Обновление размера при повороте экрана
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+
+        animate();
+    </script>
 </body>
 </html>
