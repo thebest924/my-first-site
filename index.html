@@ -2,255 +2,176 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zefir Universe 2.0</title>
-    
+    <title>Проект: Лесные Олени</title>
     <style>
         :root {
-            --pink: #FFC0CB;
-            --blue: #B0E0E6;
-            --white: #ffffff;
-            --text: #444;
+            --forest-dark: #1b2e20;
+            --deer-brown: #a67c52;
+            --soft-cream: #f4ede3;
+            --accent-gold: #d4af37;
         }
 
         body {
-            margin: 0;
-            padding: 0;
+            background: linear-gradient(135deg, #2d4a35, #121d15);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #fff;
-            color: var(--text);
-            overflow-x: hidden;
-        }
-
-        /* Главный экран */
-        header {
-            height: 100vh;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, var(--pink), var(--blue));
-            position: relative;
-            text-align: center;
-        }
-
-        canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-        }
-
-        .hero-content {
-            z-index: 2;
-            pointer-events: none; /* Текст не мешает кликам */
-        }
-
-        h1 {
-            font-size: 3.5rem;
-            color: white;
-            text-shadow: 2px 2px 15px rgba(0,0,0,0.1);
-            margin: 0 0 10px 0;
-        }
-
-        /* КНОПКА САЛЮТА */
-        .burst-btn {
-            z-index: 10; /* Поверх всего */
-            background: rgba(255, 255, 255, 0.8);
-            color: var(--pink);
-            border: 2px solid white;
-            padding: 15px 30px;
-            border-radius: 30px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            position: relative;
-            top: 20px;
-        }
-
-        .burst-btn:hover {
-            background: white;
-            transform: scale(1.1) translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        }
-
-        .burst-btn:active {
-            transform: scale(0.95) translateY(0);
-        }
-
-        /* Секции с текстом */
-        section {
-            padding: 60px 20px;
-            max-width: 800px;
-            margin: 0 auto;
-            line-height: 1.6;
-            position: relative;
-            z-index: 3;
-            background: white;
+            min-height: 100vh;
+            margin: 0;
+            color: var(--soft-cream);
         }
 
         .card {
-            background: #fdfdfd;
-            border-left: 5px solid var(--pink);
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border-radius: 0 15px 15px 0;
-            transition: 0.3s;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            width: 350px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            border-left-color: var(--blue);
+        .image-placeholder {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 2px solid var(--deer-brown);
+            transition: background-image 0.5s ease;
         }
 
-        h2 { 
-            color: #ff8fb1; 
-            border-bottom: 2px solid var(--blue); 
-            display: inline-block; 
+        h1 {
+            font-size: 24px;
+            color: var(--accent-gold);
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .fact-tag {
+            display: inline-block;
+            background: var(--deer-brown);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .description {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            opacity: 0.9;
+            min-height: 90px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 15px;
             margin-bottom: 20px;
         }
-        
+
+        .stat-item span {
+            display: block;
+            color: var(--accent-gold);
+            font-weight: bold;
+        }
+
+        /* Кнопка "Дальше" */
+        .next-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent-gold);
+            border: none;
+            border-radius: 10px;
+            color: var(--forest-dark);
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 16px;
+        }
+
+        .next-btn:hover {
+            background: var(--soft-cream);
+            transform: scale(1.02);
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <canvas id="rain"></canvas>
-        <div class="hero-content">
-            <h1>Zefir Universe</h1>
-            <p style="color: white; font-size: 1.1rem; margin: 0;">Твоя доза воздушной нежности</p>
+    <div class="card">
+        <div id="deer-img" class="image-placeholder" style="background-image: url('https://images.unsplash.com/photo-1484406566174-9da000fda645?q=80&w=1000');"></div>
+        <div id="deer-fact" class="fact-tag">Уникальный факт: Смена рогов каждый год</div>
+        <h1 id="deer-name">Благородный олень</h1>
+        <p id="deer-desc" class="description">
+            Символ грации и лесной силы. Эти животные обладают невероятным слухом и способны чувствовать приближение человека за сотни метров.
+        </p>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <span>Скорость</span>
+                <div id="deer-speed">до 50 км/ч</div>
+            </div>
+            <div class="stat-item">
+                <span>Продолжительность</span>
+                <div id="deer-life">15–20 лет</div>
+            </div>
         </div>
-        <button class="burst-btn" onclick="createZefirBurst()">Взрыв нежности!</button>
-    </header>
 
-    <section id="history">
-        <h2>История Окрыления</h2>
-        <div class="card">
-            <p><b>Древний Египет:</b> Прародитель зефира — лекарство из алтея и меда. Помогало от простуды и радовало фараонов.</p>
-        </div>
-        <div class="card">
-            <p><b>Французский Шик:</b> В XIX веке кондитеры добавили взбитый белок и яблочное пюре. Так родился современный зефир.</p>
-        </div>
-        <div class="card">
-            <p><b>Имя Бога:</b> Назван в честь Зефира — древнегреческого бога ласкового западного ветра. Такой же легкий и нежный.</p>
-        </div>
-    </section>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+        <button class="next-btn" onclick="nextDeer()">Следующий вид →</button>
+    </div>
 
     <script>
-        // ОСНОВНАЯ СЦЕНА (ПАДАЮЩИЙ ФОН)
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('rain'), alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-
-        // Геометрия одной зефирки
-        const geometry = new THREE.IcosahedronGeometry(0.4, 1);
-        const materialPink = new THREE.MeshBasicMaterial({ color: 0xFFC0CB });
-        const materialBlue = new THREE.MeshBasicMaterial({ color: 0xB0E0E6 });
-
-        // Массив для падающих зефирок
-        const fallingZefirs = [];
-
-        // Создаем падающий фон (60 штук)
-        for (let i = 0; i < 60; i++) {
-            const material = Math.random() > 0.5 ? materialPink : materialBlue;
-            const zefir = new THREE.Mesh(geometry, material);
-            
-            zefir.position.set(
-                Math.random() * 20 - 10, 
-                Math.random() * 20 - 10, 
-                Math.random() * 10 - 5
-            );
-            
-            zefir.velocity = Math.random() * 0.02 + 0.005; // Медленно падают
-            zefir.rotSpeed = Math.random() * 0.01;
-            
-            fallingZefirs.push(zefir);
-            scene.add(zefir);
-        }
-
-        // Массив для зефирок из "салюта"
-        const burstZefirs = [];
-
-        camera.position.z = 8;
-
-        // ФУНКЦИЯ ДЛЯ КНОПКИ (САЛЮТ)
-        function createZefirBurst() {
-            const burstCount = 30; // Сколько вылетит за один раз
-            for (let i = 0; i < burstCount; i++) {
-                const material = Math.random() > 0.5 ? materialPink : materialBlue;
-                // Зефирки салюта чуть меньше падающих
-                const burstGeometry = new THREE.IcosahedronGeometry(0.25, 1);
-                const zefir = new THREE.Mesh(burstGeometry, material);
-                
-                // Все вылетают из центра (примерно за текстом)
-                zefir.position.set(0, 0, 0);
-                
-                // Случайное направление взрыва (вверх и в стороны)
-                zefir.vx = (Math.random() - 0.5) * 0.3; // Скорость по X
-                zefir.vy = Math.random() * 0.3 + 0.1;   // Скорость по Y (всегда вверх)
-                zefir.vz = (Math.random() - 0.5) * 0.2; // Скорость по Z
-                
-                zefir.rotSpeed = Math.random() * 0.1;
-                zefir.life = 100; // "Жизнь" зефирки (чтобы потом исчезла)
-
-                burstZefirs.push(zefir);
-                scene.add(zefir);
+        const deers = [
+            {
+                name: "Благородный олень",
+                fact: "Уникальный факт: Смена рогов каждый год",
+                desc: "Символ грации и лесной силы. Эти животные обладают невероятным слухом и способны чувствовать приближение человека за сотни метров.",
+                speed: "до 50 км/ч",
+                life: "15–20 лет",
+                img: "https://images.unsplash.com/photo-1484406566174-9da000fda645?q=80&w=1000"
+            },
+            {
+                name: "Северный олень",
+                fact: "Уникальный факт: Рога есть и у самок",
+                desc: "Единственный вид оленей, у которого и самцы, и самки носят рога. Их копыта меняются по сезону, чтобы не скользить на льду.",
+                speed: "до 80 км/ч",
+                life: "12–15 лет",
+                img: "image_1.png" /* ССЫЛКА НА СЕВЕРНОГО ОЛЕНЯ ОБНОВЛЕНА */
+            },
+            {
+                name: "Пятнистый олень",
+                fact: "Уникальный факт: Пятна для маскировки",
+                desc: "Их называют «олени-цветки». Летом они покрыты яркими белыми пятнами, которые помогают прятаться от хищников в лучах солнца.",
+                speed: "до 45 км/ч",
+                life: "11–14 лет",
+                img: "image_2.png" /* ССЫЛКА НА ПЯТНИСТОГО ОЛЕНЯ ОБНОВЛЕНА */
             }
+        ];
+
+        let currentIndex = 0;
+
+        function nextDeer() {
+            currentIndex = (currentIndex + 1) % deers.length;
+            const deer = deers[currentIndex];
+
+            document.getElementById('deer-name').innerText = deer.name;
+            document.getElementById('deer-fact').innerText = deer.fact;
+            document.getElementById('deer-desc').innerText = deer.desc;
+            document.getElementById('deer-speed').innerText = deer.speed;
+            document.getElementById('deer-life').innerText = deer.life;
+            document.getElementById('deer-img').style.backgroundImage = `url('${deer.img}')`;
         }
-
-        // ГЛАВНЫЙ ЦИКЛ АНИМАЦИИ
-        function animate() {
-            requestAnimationFrame(animate);
-            
-            // 1. Анимация падающего фона
-            fallingZefirs.forEach(z => {
-                z.position.y -= z.velocity;
-                z.rotation.x += z.rotSpeed;
-                z.rotation.y += z.rotSpeed;
-                
-                // Если улетела вниз, возвращаем наверх
-                if (z.position.y < -10) z.position.y = 10;
-            });
-
-            // 2. Анимация салюта (burst)
-            for (let i = burstZefirs.length - 1; i >= 0; i--) {
-                const z = burstZefirs[i];
-                z.position.x += z.vx;
-                z.position.y += z.vy;
-                z.position.z += z.vz;
-                
-                z.rotation.x += z.rotSpeed;
-                z.rotation.y += z.rotSpeed;
-                
-                // Гравитация (притягивает салют вниз со временем)
-                z.vy -= 0.005; 
-                
-                z.life--; // Уменьшаем жизнь
-
-                // Если жизнь кончилась или улетела далеко, удаляем
-                if (z.life <= 0 || z.position.y < -10) {
-                    scene.remove(z);
-                    burstZefirs.splice(i, 1);
-                }
-            }
-            
-            renderer.render(scene, camera);
-        }
-
-        // Обновление размера при повороте экрана
-        window.addEventListener('resize', () => {
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-        });
-
-        animate();
     </script>
+
 </body>
 </html>
