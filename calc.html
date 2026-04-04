@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age of Industry: PRO Calc</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #121212; color: #e0e0e0; padding: 15px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .card { background: #1e1e1e; padding: 12px; border-radius: 8px; border: 1px solid #333; margin-bottom: 10px; }
+        h3 { margin-top: 0; color: #4caf50; font-size: 16px; }
+        label { display: block; font-size: 12px; color: #bbb; }
+        input, select { width: 90%; background: #2b2b2b; color: white; border: 1px solid #444; padding: 8px; border-radius: 4px; margin-top: 4px; }
+        button { background: #4caf50; color: white; padding: 12px; border: none; border-radius: 6px; width: 100%; font-weight: bold; margin-top: 10px; }
+        #result { margin-top: 15px; padding: 10px; border-radius: 6px; background: #252525; min-height: 40px; border-left: 5px solid #4caf50; }
+        .error { border-left-color: #f44336 !important; color: #ff8a80; }
+    </style>
+</head>
+<body>
+
+    <h2 style="text-align: center;">⚙️ Калькулятор Ресурсов</h2>
+
+    <div class="card">
+        <h3>💰 Финансы и Энергия</h3>
+        <div class="grid">
+            <div><label>Деньги ($)</label><input type="number" id="money" value="0"></div>
+            <div><label>Энергия (⚡)</label><input type="number" id="energy" value="0"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>📦 Склад Ур. 1 (Сырье)</h3>
+        <div class="grid">
+            <div><label>Дерево</label><input type="number" id="wood" value="0"></div>
+            <div><label>Уголь</label><input type="number" id="coal" value="0"></div>
+            <div><label>Руда</label><input type="number" id="ore" value="0"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>🏭 Склад Ур. 2 (Полуфабрикаты)</h3>
+        <div class="grid">
+            <div><label>Доски</label><input type="number" id="planks" value="0"></div>
+            <div><label>Слитки</label><input type="number" id="ingots" value="0"></div>
+            <div><label>Химикаты</label><input type="number" id="chems" value="0"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>🚀 Цель производства</h3>
+        <select id="target">
+            <option value="plank">Доски (2 Дер + $2)</option>
+            <option value="ingot">Слитки (1 Руда + 2 Уг + $2)</option>
+            <option value="chem">Химикаты (1 Уг + 1 Дер + $2)</option>
+            <option value="plastic">Пластик (1 Хим + 1 Доска + 2⚡)</option>
+            <option value="electronics">Электроника (1 Слит + 1 Хим + 2⚡)</option>
+        </select>
+    </div>
+
+   <button id="calcBtn">РАССЧИТАТЬ</button>
+
+
+    <div id="result">Введите данные и нажмите кнопку</div>
+
+    <script>
+    document.getElementById('calcBtn').onclick = function() {
+        const m = parseInt(document.getElementById('money').value) || 0;
+        const e = parseInt(document.getElementById('energy').value) || 0;
+        const w = parseInt(document.getElementById('wood').value) || 0;
+        const c = parseInt(document.getElementById('coal').value) || 0;
+        const r = parseInt(document.getElementById('ore').value) || 0;
+        const pk = parseInt(document.getElementById('planks').value) || 0;
+        const ig = parseInt(document.getElementById('ingots').value) || 0;
+        const ch = parseInt(document.getElementById('chems').value) || 0;
+        
+        const target = document.getElementById('target').value;
+        const resBox = document.getElementById('result');
+        resBox.classList.remove('error');
+
+        let msg = "";
+        let can = false;
+
+        if (target === 'plank') {
+            if (w >= 2 && m >= 2) { can = true; msg = "✅ Можно! Осталось: " + (w-2) + " дерева, " + (m-2) + "$"; }
+            else msg = "❌ Нужно: 2 дерева и 2$";
+        }
+        else if (target === 'ingot') {
+            if (r >= 1 && c >= 2 && m >= 2) { can = true; msg = "✅ Можно! Осталось: " + (r-1) + " руды, " + (c-2) + " угля, " + (m-2) + "$"; }
+            else msg = "❌ Нужно: 1 руда, 2 угля, 2$";
+        }
+        else if (target === 'chem') {
+            if (c >= 1 && w >= 1 && m >= 2) { can = true; msg = "✅ Можно! Осталось: " + (c-1) + " угля, " + (w-1) + " дерева, " + (m-2) + "$"; }
+            else msg = "❌ Нужно: 1 уголь, 1 дерево, 2$";
+        }
+        else if (target === 'plastic') {
+            if (ch >= 1 && pk >= 1 && e >= 2) { can = true; msg = "✅ Готово! Пластик создан. Энергия: " + (e-2); }
+            else msg = "❌ Нужно: 1 хим, 1 доска, 2⚡";
+        }
+        else if (target === 'electronics') {
+            if (ig >= 1 && ch >= 1 && e >= 2) { can = true; msg = "✅ Готово! Электроника создана. Энергия: " + (e-2); }
+            else msg = "❌ Нужно: 1 слиток, 1 хим, 2⚡";
+        }
+
+        if (!can) resBox.classList.add('error');
+        resBox.innerText = msg;
+    };
+</script>
+
+   
